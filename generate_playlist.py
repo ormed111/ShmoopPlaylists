@@ -10,9 +10,10 @@ PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
 
 class PlaylistAlbum(NamedTuple):
     album: Album
-    count: int
+    count: int  # how many songs from this album?
 
 
+# todo: read this from a config file or UI or something #NurveDoThis
 PLAYLIST = [
     PlaylistAlbum(album=Album(name='animals as leaders', artist='animals as leaders'), count=2),
     PlaylistAlbum(album=Album(name='the mountain', artist='haken'), count=2),

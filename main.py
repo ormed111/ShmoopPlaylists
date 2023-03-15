@@ -3,7 +3,7 @@ from typing import List
 import logging
 
 from auth import get_auth_url, get_access_token
-from generate_playlist import generate_playlist
+from generate_playlist import generate_playlist, PLAYLIST_ID
 
 app = Flask(__name__)
 
@@ -16,7 +16,8 @@ def home():
 
 
 def playlist_desc(tracks: List[str]) -> str:
-    desc = f"Generated playlist ({len(tracks)} tracks):<br>"
+    playlist_link = f'<a href="https://open.spotify.com/playlist/{PLAYLIST_ID}">playlist</a>'
+    desc = f"Generated {playlist_link} ({len(tracks)} tracks):<br>"
     for i, track in enumerate(tracks):
         desc += f"{i+1}. {track}<br>"
     return desc
