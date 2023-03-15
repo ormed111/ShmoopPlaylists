@@ -90,34 +90,3 @@ class SpotifyClient:
         route = f"playlists/{playlist_id}/tracks"
         data = {"uris": [f"spotify:track:{track.id}" for track in self.get_playlist_tracks(playlist_id)]}
         SpotifyRequest.delete(access_token=self.__access_token, route=route, data=data)
-
-
-
-def get_access_token(client_id, client_secret):
-    # Set the token route URL
-    url = "https://accounts.spotify.com/api/token"
-
-    # Set the authorization header with the client ID and client secret
-    headers = {
-        "Authorization": "Basic your_client_id_and_client_secret_here"
-    }
-
-    # Set the request body with the authorization code and redirect URI
-    data = {
-        "grant_type": "authorization_code",
-        "code": "your_authorization_code_here",
-        "redirect_uri": "your_redirect_uri_here"
-    }
-
-    # Make the HTTP request to the Spotify API to get the access token
-    response = requests.post(url, headers=headers, data=data)
-
-    # If the request was successful, parse the JSON response and extract the access token
-    if response.status_code == 200:
-        access_token = response.json()['access_token']
-        print(access_token)
-
-    # If the request was not successful, print the error message
-    else:
-        print(f"Error: {response.text}")
-

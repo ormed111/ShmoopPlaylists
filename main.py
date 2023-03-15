@@ -1,34 +1,34 @@
-from typing import NamedTuple
-import random
+from flask import Flask, request, redirect
+from typing import List
+import logging
 
-from api import SpotifyClient, Album
+from auth import get_auth_url, get_access_token
+from generate_playlist import generate_playlist
 
+app = Flask(__name__)
 
-PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
-
-
-class PlaylistAlbum(NamedTuple):
-    album: Album
-    count: int
+logging.basicConfig(level=logging.INFO)
 
 
-PLAYLIST = [
-    PlaylistAlbum(album=Album(name='animals as leaders', artist='animals as leaders'), count=2),
-    PlaylistAlbum(album=Album(name='the mountain', artist='haken'), count=2),
-    PlaylistAlbum(album=Album(name=r'סטטוס', artist='nunu'), count=3)
-]
+@app.route("/")
+def home():
+    return redirect(get_auth_url())
 
-def generate_playlist():
-    tracks = []
-    client = SpotifyClient(access_token=ACCESS_TOKEN)
 
-    for entry in PLAYLIST:
-        album_tracks = random.choices(client.get_album_tracks(entry.album), k=entry.count)
-        tracks.extend(album_tracks)
+def playlist_desc(tracks: List[str]) -> str:
+    desc = f"Generated playlist ({len(tracks)} tracks):<br>"
+    for i, track in enumerate(tracks):
+        desc += f"{i+1}. {track}<br>"
+    return desc
 
-    print(f"Adding total of {len(tracks)} tracks to playlist")
-    client.clear_playlist(playlist_id=PLAYLIST_ID)
-    client.populate_playlist(playlist_id=PLAYLIST_ID, tracks=tracks)
+
+@app.route("/callback")
+def callback():
+    code = request.args.get("code")
+    access_token = get_access_token(code)
+    generated_tracks = generate_playlist(access_token)
+    return playlist_desc(generated_tracks)
+
 
 if __name__ == '__main__':
-    generate_playlist()
+    app.run(debug=True, port=1312)
