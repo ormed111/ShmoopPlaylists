@@ -2,6 +2,7 @@ import requests
 import json
 from typing import List, NamedTuple, Optional, Dict, Any, Union
 from urllib3.util import Url
+import logging
 
 RequestsMethod = Union[requests.get, requests.post, requests.delete]
 
@@ -20,6 +21,7 @@ class SpotifyRequest:
     def _request(method: RequestsMethod, route: str, access_token: str, **kwargs):
         url = Url(scheme="https", host="api.spotify.com/v1", path=route)
         headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        logging.debug(f"Request to '{url.url}', headers={headers}, kwargs={kwargs}")
         response = method(url=url.url, headers=headers, **kwargs)
         response.raise_for_status()
         return response.json()
