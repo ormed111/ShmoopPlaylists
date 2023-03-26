@@ -14,7 +14,14 @@ class Album(NamedTuple):
 class Track(NamedTuple):
     name: str
     id: str
-
+    
+    
+def raise_for_status(response: requests.Response):
+    try:
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        exception_type = type(e)
+        raise exception_type(f"{e}. Message: '{response.text}'")
 
 class SpotifyRequest:
     @staticmethod
@@ -23,7 +30,7 @@ class SpotifyRequest:
         headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
         logging.debug(f"Request to '{url.url}', headers={headers}, kwargs={kwargs}")
         response = method(url=url.url, headers=headers, **kwargs)
-        response.raise_for_status()
+        raise_for_status(response)
         return response.json()
 
     @classmethod
@@ -45,6 +52,12 @@ class SpotifyRequest:
 class SpotifyClient:
     def __init__(self, access_token: str):
         self.__access_token = access_token
+
+    def sanity(self) -> Dict[str, Any]:
+        route = "me"
+        data = SpotifyRequest.get(access_token=self.__access_token, route=route)
+        logging.info(data)
+        return data
 
     def get_album_id(self, album: Album) -> str:
         route = "search"

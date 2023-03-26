@@ -5,8 +5,8 @@ import logging
 from api import SpotifyClient, Album, Track
 
 
-PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
-
+MY_PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
+PLAYLIST_ID = "4YK6bqZpc8IhNf1coqaw0w"
 
 class PlaylistAlbum(NamedTuple):
     album: Album
@@ -34,9 +34,8 @@ def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Tra
     return chosen_tracks
 
 
-def generate_playlist(access_token: str) -> List[str]:
+def generate_playlist(client: SpotifyClient) -> List[str]:
     tracks = []
-    client = SpotifyClient(access_token=access_token)
 
     for entry in PLAYLIST:
         try:
