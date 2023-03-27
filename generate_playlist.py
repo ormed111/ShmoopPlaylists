@@ -1,11 +1,15 @@
+import json
 from typing import NamedTuple, List
 import random
 import logging
 
 from api import SpotifyClient, Album, Track
 
+GAYLIST = "7sJdvYeZ7Xe78qXmPOhDQ0"
 
-PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
+SHMURVE_LIST = "5aV0JRJMZcXHS5dLckCzRT"
+
+PLAYLIST_ID = GAYLIST
 
 
 class PlaylistAlbum(NamedTuple):
@@ -13,18 +17,18 @@ class PlaylistAlbum(NamedTuple):
     count: int  # how many songs from this album?
 
 
-# todo: read this from a config file or UI or something #NurveDoThis
-PLAYLIST = [
-    PlaylistAlbum(album=Album(name='animals as leaders', artist='animals as leaders'), count=2),
-    PlaylistAlbum(album=Album(name='the mountain', artist='haken'), count=2),
-    PlaylistAlbum(album=Album(name=r'סטטוס', artist='nunu'), count=3),
-    PlaylistAlbum(album=Album(name='Butterfly 3000', artist='King gizzard & the lizard wizard'), count=4)
-]
+def load_albums_from_file(path="albums.json") -> List[PlaylistAlbum]:
+
+    with open(path, "r", encoding='utf-8') as f:
+        data = json.load(f)
+    return [PlaylistAlbum(album=Album(name=entry["name"], artist=entry["artist"]), count=entry["count"])
+            for entry in data]
 
 
 def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Track]:
     if count > len(tracks):
-        raise RuntimeError(f"Error in configuration, asked for {count} tracks from album that contains only {len(tracks)} songs")
+        raise RuntimeError(
+            f"Error in configuration, asked for {count} tracks from album that contains only {len(tracks)} songs")
 
     chosen_tracks = []
     while len(chosen_tracks) < count:
@@ -38,9 +42,15 @@ def generate_playlist(access_token: str) -> List[str]:
     tracks = []
     client = SpotifyClient(access_token=access_token)
 
-    for entry in PLAYLIST:
+
+    from pathlib import Path
+    albums_path = Path(__file__).parent / "albums.json"
+    playlist = load_albums_from_file(path=albums_path)
+
+    for entry in playlist:
         try:
-            album_tracks = choose_random_tracks_from_album(tracks=client.get_album_tracks(entry.album), count=entry.count)
+            album_tracks = choose_random_tracks_from_album(tracks=client.get_album_tracks(entry.album),
+                                                           count=entry.count)
         except RuntimeError:
             logging.exception("Error while handling album %s, skipping it..", entry.album)
             continue
