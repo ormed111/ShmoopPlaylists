@@ -1,4 +1,3 @@
-import json
 from typing import NamedTuple, List
 import random
 import logging
@@ -7,9 +6,7 @@ from api import SpotifyClient, Album, Track
 
 GAYLIST = "7sJdvYeZ7Xe78qXmPOhDQ0"
 
-SHMURVE_LIST = "5aV0JRJMZcXHS5dLckCzRT"
-
-PLAYLIST_ID = GAYLIST
+PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
 
 
 class PlaylistAlbum(NamedTuple):
@@ -27,8 +24,7 @@ def load_albums_from_file(path="albums.json") -> List[PlaylistAlbum]:
 
 def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Track]:
     if count > len(tracks):
-        raise RuntimeError(
-            f"Error in configuration, asked for {count} tracks from album that contains only {len(tracks)} songs")
+        raise RuntimeError(f"Error in configuration, asked for {count} tracks from album that contains only {len(tracks)} songs")
 
     chosen_tracks = []
     while len(chosen_tracks) < count:
@@ -38,9 +34,8 @@ def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Tra
     return chosen_tracks
 
 
-def generate_playlist(access_token: str) -> List[str]:
+def generate_playlist(client: SpotifyClient) -> List[str]:
     tracks = []
-    client = SpotifyClient(access_token=access_token)
 
 
     from pathlib import Path

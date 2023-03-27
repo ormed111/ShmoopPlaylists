@@ -5,7 +5,8 @@ import webbrowser
 import threading
 import time
 
-from auth import get_auth_url, get_access_token
+from api import SpotifyClient
+from auth import get_auth_url, get_access_token, get_ip, get_port
 from generate_playlist import generate_playlist, PLAYLIST_ID
 
 app = Flask(__name__)
@@ -15,7 +16,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 @app.route("/")
 def home():
-    return redirect(get_auth_url())
+    auth = get_auth_url()
+    logging.debug("Redirecting client to '%s'", auth)
+    return redirect(auth)
 
 
 def playlist_desc(tracks: List[str]) -> str:
@@ -32,17 +35,21 @@ def callback():
     logging.debug("Got code from redirect: '%s'", code)
     access_token = get_access_token(code)
     logging.debug("Converted code to access token: '%s'", access_token)
-    generated_tracks = generate_playlist(access_token)
+
+    client = SpotifyClient(access_token=access_token)
+    client.sanity()
+
+    generated_tracks = generate_playlist(client=client)
     return playlist_desc(generated_tracks)
 
 
 def open_browser():
     logging.info("Opening browser in 5 seconds")
     time.sleep(5)
-    webbrowser.open("http://localhost:1312/")
+    webbrowser.open(f"http://{get_ip()}:{get_port()}/")
 
 
 
 if __name__ == '__main__':
     threading.Thread(target=open_browser).start()
-    app.run(debug=True, port=1312, use_reloader=False)
+    app.run(debug=True, host=get_ip(), port=get_port(), use_reloader=False)
