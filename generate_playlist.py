@@ -1,25 +1,44 @@
-from typing import NamedTuple, List
+import json
+from typing import NamedTuple, List, TypedDict
 import random
 import logging
+from pathlib import Path
 
 from api import SpotifyClient, Album, Track
 
 GAYLIST = "7sJdvYeZ7Xe78qXmPOhDQ0"
-
 PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
+DEFAULT_ALBUMS_JSON = Path(__file__).parent / "albums.json"
+
+
+class AlbumJson(TypedDict):
+    name: str
+    artist: str
+    count: int
 
 
 class PlaylistAlbum(NamedTuple):
     album: Album
     count: int  # how many songs from this album?
 
+    @classmethod
+    def from_json(cls, entry: AlbumJson) -> "PlaylistAlbum":
+        album = Album(name=entry["name"], artist=entry["artist"])
+        return cls(album=album, count=entry["count"])
 
-def load_albums_from_file(path="albums.json") -> List[PlaylistAlbum]:
+    def to_json(self) -> AlbumJson:
+        # Maybe we'll use this in the future when we add a user interface for creating the JSON
+        return {
+            "name": self.album.name,
+            "artist": self.album.artist,
+            "count": self.count
+        }
 
-    with open(path, "r", encoding='utf-8') as f:
+
+def read_albums_from_file(path: Path = DEFAULT_ALBUMS_JSON) -> List[PlaylistAlbum]:
+    with path.open('r', encoding='utf-8') as f:
         data = json.load(f)
-    return [PlaylistAlbum(album=Album(name=entry["name"], artist=entry["artist"]), count=entry["count"])
-            for entry in data]
+    return [PlaylistAlbum.from_json(entry) for entry in data]
 
 
 def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Track]:
@@ -34,15 +53,11 @@ def choose_random_tracks_from_album(tracks: List[Track], count: int) -> List[Tra
     return chosen_tracks
 
 
-def generate_playlist(client: SpotifyClient) -> List[str]:
+def generate_playlist(client: SpotifyClient, albums_path: Path = DEFAULT_ALBUMS_JSON) -> List[str]:
     tracks = []
 
-
-    from pathlib import Path
-    albums_path = Path(__file__).parent / "albums.json"
-    playlist = load_albums_from_file(path=albums_path)
-
-    for entry in playlist:
+    playlist_albums = read_albums_from_file(path=albums_path)
+    for entry in playlist_albums:
         try:
             album_tracks = choose_random_tracks_from_album(tracks=client.get_album_tracks(entry.album),
                                                            count=entry.count)
