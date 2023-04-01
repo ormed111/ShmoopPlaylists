@@ -70,7 +70,7 @@ export default {
         );
     }
   },
-  beforeMount() {
+  created() {
     this.getUserInfo()
     this.getAlbumsJson()
   }

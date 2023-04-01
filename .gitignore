@@ -27,4 +27,4 @@ pnpm-debug.log*
 __pycache__
 
 # Shmoop
-creds.txt
+creds.env

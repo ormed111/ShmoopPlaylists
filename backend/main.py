@@ -105,5 +105,5 @@ def open_browser():
 
 
 if __name__ == '__main__':
-    threading.Thread(target=open_browser).start()
+    # threading.Thread(target=open_browser).start()
     app.run(debug=True, host=get_ip(), port=get_port(), use_reloader=False)
