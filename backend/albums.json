@@ -1,0 +1,118 @@
+[
+    {
+        "name": "quality over opinion",
+        "artist": "louis cole",
+        "count": 3,
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b2737bed62fe63257e9edfe3bcb4",
+                "width": 640
+            },
+            {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e027bed62fe63257e9edfe3bcb4",
+                "width": 300
+            },
+            {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d000048517bed62fe63257e9edfe3bcb4",
+                "width": 64
+            }
+        ],
+        "id": "57Xg6JumEnG5i5MBzJVdT7",
+        "image": {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737bed62fe63257e9edfe3bcb4",
+            "width": 640
+        },
+        "total_tracks": 20
+    },
+    {
+        "name": "l'enfant sauvage",
+        "artist": "gojira",
+        "count": 3,
+        "id": "2WrU1VLLBaZy4k5s0p5jzt",
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b27398fd12235fab9949beaf8496",
+                "width": 640
+            },
+            {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e0298fd12235fab9949beaf8496",
+                "width": 300
+            },
+            {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d0000485198fd12235fab9949beaf8496",
+                "width": 64
+            }
+        ],
+        "image": {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b27398fd12235fab9949beaf8496",
+            "width": 640
+        },
+        "total_tracks": 11
+    },
+    {
+        "name": "mint jams(live)",
+        "artist": "casiopea",
+        "count": 2,
+        "id": "2yvR4wVM1XLEKVad6F3ja9",
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b2737423952f612534ca9a341421",
+                "width": 640
+            },
+            {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e027423952f612534ca9a341421",
+                "width": 300
+            },
+            {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d000048517423952f612534ca9a341421",
+                "width": 64
+            }
+        ],
+        "image": {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b2737423952f612534ca9a341421",
+            "width": 640
+        },
+        "total_tracks": 7
+    },
+    {
+        "name": "\u05e1\u05d8\u05d8\u05d5\u05e1",
+        "artist": "nunu",
+        "count": 8,
+        "id": "25NrLi2xwYYO8WniTmdKL6",
+        "images": [
+            {
+                "height": 640,
+                "url": "https://i.scdn.co/image/ab67616d0000b273a175cfb450ca6236a9f7e078",
+                "width": 640
+            },
+            {
+                "height": 300,
+                "url": "https://i.scdn.co/image/ab67616d00001e02a175cfb450ca6236a9f7e078",
+                "width": 300
+            },
+            {
+                "height": 64,
+                "url": "https://i.scdn.co/image/ab67616d00004851a175cfb450ca6236a9f7e078",
+                "width": 64
+            }
+        ],
+        "image": {
+            "height": 640,
+            "url": "https://i.scdn.co/image/ab67616d0000b273a175cfb450ca6236a9f7e078",
+            "width": 640
+        },
+        "total_tracks": 13
+    }
+]

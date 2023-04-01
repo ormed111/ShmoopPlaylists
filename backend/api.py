@@ -1,19 +1,12 @@
 import requests
 import json
-from typing import List, NamedTuple, Optional, Dict, Any, Union
+from typing import List, Optional, Dict, Any, Union
 from urllib3.util import Url
 import logging
 
+from structs import Album, Track, AlbumImage
+
 RequestsMethod = Union[requests.get, requests.post, requests.delete]
-
-class Album(NamedTuple):
-    name: str
-    artist: str
-
-
-class Track(NamedTuple):
-    name: str
-    id: str
     
     
 def raise_for_status(response: requests.Response):
@@ -79,11 +72,25 @@ class SpotifyClient:
 
         raise RuntimeError("Failed to find album [%s]", album)
 
-    def get_album_tracks(self, album: Album) -> List[Track]:
-        album_id = self.get_album_id(album)
+    def get_album_tracks(self, album_id: str) -> List[Track]:
         route = f"albums/{album_id}/tracks"
         data = SpotifyRequest.get(access_token=self.__access_token, route=route)
         return [Track(name=item['name'], id=item['id']) for item in data['items']]
+    
+    def _get_album(self, album_id: str):
+        # Return the full Spotify album object
+        route = f"albums/{album_id}"
+        return SpotifyRequest.get(access_token=self.__access_token, route=route)
+
+    def get_album_image(self, album_id: str) -> AlbumImage:
+        album = self._get_album(album_id=album_id)
+        if 'images' in album:        
+            return album['images'][0]
+        return {}
+
+    def get_album_total_tracks(self, album_id: str) -> int:
+        album = self._get_album(album_id=album_id)
+        return album.get('total_tracks', 0)
 
     def get_playlist_tracks(self, playlist_id: str) -> List[Track]:
         route = f"playlists/{playlist_id}/tracks"

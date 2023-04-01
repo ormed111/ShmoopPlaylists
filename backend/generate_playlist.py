@@ -1,20 +1,16 @@
 import json
-from typing import NamedTuple, List, TypedDict
+from typing import NamedTuple, List
 import random
 import logging
 from pathlib import Path
 
-from api import SpotifyClient, Album, Track
+from api import SpotifyClient
+from structs import AlbumJson, Album, Track
 
 GAYLIST = "7sJdvYeZ7Xe78qXmPOhDQ0"
 PLAYLIST_ID = "5aV0JRJMZcXHS5dLckCzRT"
 DEFAULT_ALBUMS_JSON = Path(__file__).parent / "albums.json"
 
-
-class AlbumJson(TypedDict):
-    name: str
-    artist: str
-    count: int
 
 
 class PlaylistAlbum(NamedTuple):
@@ -59,7 +55,8 @@ def generate_playlist(client: SpotifyClient, albums_path: Path = DEFAULT_ALBUMS_
     playlist_albums = read_albums_from_file(path=albums_path)
     for entry in playlist_albums:
         try:
-            album_tracks = choose_random_tracks_from_album(tracks=client.get_album_tracks(entry.album),
+            album_id = client.get_album_id(album=entry.album)
+            album_tracks = choose_random_tracks_from_album(tracks=client.get_album_tracks(album_id),
                                                            count=entry.count)
         except RuntimeError:
             logging.exception("Error while handling album %s, skipping it..", entry.album)
