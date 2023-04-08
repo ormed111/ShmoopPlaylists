@@ -10,6 +10,7 @@ import time
 from api import SpotifyClient
 from auth import get_auth_url, get_access_token, get_ip, get_port
 from generate_playlist import generate_playlist, PLAYLIST_ID, DEFAULT_ALBUMS_JSON, PlaylistAlbum
+from structs import SpotifyUser
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +19,7 @@ CORS(app)
 class GlobalAppContext:
     def __init__(self):
         self.client: Optional[SpotifyClient] = None
+        self.user_info: Optional[SpotifyUser] = None
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -57,12 +59,10 @@ def frontend():
 
 @app.route("/user_info")
 def user_info():
-    data = ctx.client.sanity()
-    user_dict = {
-        "name": data['display_name'],
-        "image": data['images'][0]['url']
-    }
-    return user_dict, 200
+    if ctx.user_info is None:
+        # Cache the user info
+        ctx.user_info = ctx.client.user_info()
+    return ctx.user_info, 200
 
 
 def playlist_desc(tracks: List[str]) -> str:
@@ -76,7 +76,10 @@ def playlist_desc(tracks: List[str]) -> str:
 @app.route("/generate")
 def generate():
     generated_tracks = generate_playlist(client=ctx.client)
-    return playlist_desc(generated_tracks)
+    return {
+        "tracks": generated_tracks,
+        "href": f"https://open.spotify.com/playlist/{PLAYLIST_ID}"
+    }
 
 
 @app.route("/albums")

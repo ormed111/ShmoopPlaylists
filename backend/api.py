@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any, Union
 from urllib3.util import Url
 import logging
 
-from structs import Album, Track, AlbumImage
+from structs import Album, Track, AlbumImage, SpotifyUser
 
 RequestsMethod = Union[requests.get, requests.post, requests.delete]
     
@@ -46,11 +46,18 @@ class SpotifyClient:
     def __init__(self, access_token: str):
         self.__access_token = access_token
 
-    def sanity(self) -> Dict[str, Any]:
+    def sanity(self):
+        # Just a function to check that the client was initialized properly with right auth
+        return self.user_info()
+
+    def user_info(self) -> SpotifyUser:
         route = "me"
         data = SpotifyRequest.get(access_token=self.__access_token, route=route)
         logging.info(data)
-        return data
+        return {
+            "name": data['display_name'],
+            "image": data['images'][0]['url']
+        }
 
     def get_album_id(self, album: Album) -> str:
         route = "search"

@@ -1,15 +1,21 @@
 <template>
   <h1 style="color:green">ShmoopPlaylists</h1>
+  <UserInfo/>
   <PlaylistAlbums/>
+  <GeneratePlaylist/>
 </template>
 
 <script>
+import UserInfo from './components/UserInfo.vue'
 import PlaylistAlbums from './components/PlaylistAlbums.vue'
+import GeneratePlaylist from './components/GeneratePlaylist.vue'
 
 export default {
   name: 'App',
   components: {
-    PlaylistAlbums
+    UserInfo,
+    PlaylistAlbums,
+    GeneratePlaylist
   }
 }
 </script>

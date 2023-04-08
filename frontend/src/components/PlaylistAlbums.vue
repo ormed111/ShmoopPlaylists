@@ -1,10 +1,5 @@
 <template>
 
-<div id="userImg">
-    <img :src="user.image" width=48 height=48>
-    <p style="font-size:10px">Hello {{ user.name }}</p>
-</div>
-
 <div class="container">
     <div class="row">
         <div class="col-sm-10">
@@ -39,19 +34,10 @@ export default {
   name: 'PlaylistAlbums',
   data() {
     return {
-        albums: [],
-        user: {
-            name: String,
-            image: String
-        }
+        albums: []
     };
   },
   methods: {
-    getUserInfo() {
-        const path = "http://localhost:1312/user_info"
-        fetch(path).then(response => response.json()).then(data => {this.user = data})
-        console.log(this.user)
-    },
     getAlbumsJson() {
         const path = "http://localhost:1312/albums";
         fetch(path).then(response => {
@@ -71,7 +57,6 @@ export default {
     }
   },
   created() {
-    this.getUserInfo()
     this.getAlbumsJson()
   }
 }
@@ -84,8 +69,5 @@ export default {
 }
 .paddingBetweenCols td {
   padding: 0 15px;
-}
-.userImg {
-    text-align: left;
 }
 </style>
