@@ -5,7 +5,7 @@
     </button>
 
     <div v-if="generatedPlaylist.generated" class="generated" ref="playlist">
-      <h3>Generated <a :href="generatedPlaylist.url">playlist</a> ({{ generatedPlaylist.tracks.length }} tracks):</h3>
+      <h3>Generated <a :href="generatedPlaylist.url" target="_blank">playlist</a> ({{ generatedPlaylist.tracks.length }} tracks):</h3>
       <text v-for="(track, index) in generatedPlaylist.tracks" :key="index">{{ index+1 }}. {{ track}}<br></text>
     </div>
   </div>
